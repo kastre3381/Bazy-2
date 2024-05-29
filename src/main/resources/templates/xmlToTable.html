@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>XML to table</title>
+</head>
+<body>
+<h1>Genealogy Tree Data</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th>id_osoby</th>
+        <th>imie</th>
+        <th>nazwisko</th>
+        <th>data_urodzenia</th>
+        <th>data_smierci</th>
+        <th>plec</th>
+        <th>id_ojca</th>
+        <th>id_matki</th>
+        <th>id_partnera</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="data : ${xmlToTable}">
+        <td th:text="${data.id_osoby}">id_osoby</td>
+        <td th:text="${data.imie}">imie</td>
+        <td th:text="${data.nazwisko}">nazwisko</td>
+        <td th:text="${data.data_urodzenia}">data_urodzenia</td>
+        <td th:text="${data.data_smierci}">data_smierci</td>
+        <td th:text="${data.plec}">plec</td>
+        <td th:text="${data.id_ojca}">id_ojca</td>
+        <td th:text="${data.id_matki}">id_matki</td>
+        <td th:text="${data.id_partnera}">id_partnera</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

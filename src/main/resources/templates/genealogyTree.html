@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Genealogy Tree</title>
+</head>
+<body>
+<h1>Genealogy Tree Data</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>XML Data</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="tree : ${genealogyTrees}">
+        <td th:text="${tree.id}">ID</td>
+        <td th:text="${tree.xmlData}">XML Data</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

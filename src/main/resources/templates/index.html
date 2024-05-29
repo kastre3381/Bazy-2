@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Genealogy Tree</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-5">Genealogy Tree</h1>
+
+    <!-- Formularz dodawania nowego drzewa -->
+    <div class="mt-4">
+        <h3>Add New Tree</h3>
+        <form th:action="@{/addTree}" th:object="${newTree}" method="post">
+            <div class="form-group">
+                <label for="xmlData">XML Data</label>
+                <textarea class="form-control" id="xmlData" th:field="*{xmlData}" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Tree</button>
+        </form>
+    </div>
+
+    <!-- Formularz usuwania osoby -->
+    <div class="mt-4">
+        <h3>Delete Person</h3>
+        <form th:action="@{/deletePerson}" method="post">
+            <div class="form-group">
+                <label for="personId">Person ID</label>
+                <input type="number" class="form-control" id="personId" name="personId" required>
+            </div>
+            <div class="form-group">
+                <label for="treeId">Tree ID</label>
+                <input type="number" class="form-control" id="treeId" name="treeId" required>
+            </div>
+            <button type="submit" class="btn btn-danger">Delete Person</button>
+        </form>
+    </div>
+
+    <!-- Formularz wyboru drzewa -->
+    <div class="mt-4">
+        <h3>Select Tree</h3>
+        <form th:action="@{/selectTree}" method="post">
+            <div class="form-group">
+                <label for="treeIdSelect">Tree ID</label>
+                <select class="form-control" id="treeIdSelect" name="treeIdSelect" required>
+                    <option th:each="tree : ${trees}" th:value="${tree.id}" th:text="${tree.id}"></option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Select Tree</button>
+        </form>
+    </div>
+
+    <!-- Wyświetlanie wybranego drzewa -->
+    <div class="mt-4" th:if="${selectedTree != null}">
+        <h3>Selected Tree</h3>
+        <pre th:text="${selectedTree.xmlData}"></pre>
+    </div>
+</div>
+</body>
+</html>
