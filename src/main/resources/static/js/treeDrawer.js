@@ -1,31 +1,23 @@
 const parsedData = JSON.parse(data);
 
-
 class Person {
     constructor(id) {
         this.id = id;
         this.children = [];
     }
-
     addChild(child) {
         this.children.push(child);
     }
-
-    getId()
-    {
-        return this.id;
-    }
 }
+
 
 function buildFamilyTree(s, namesDict) {
     let personsDict = {};
 
-    // Create Person instances for each entry in the dictionary
     for (let id in s) {
         personsDict[id] = new Person(id);
     }
 
-    // Add children to parents
     for (let id in s) {
         let [ojca, matki, partnera] = s[id];
         let currentPerson = personsDict[id];
@@ -38,7 +30,6 @@ function buildFamilyTree(s, namesDict) {
         }
     }
 
-    // Find the root person (person without parents in the dictionary)
     let root = null;
     for (let id in s) {
         let [ojca, matki, partnera] = s[id];
@@ -47,7 +38,6 @@ function buildFamilyTree(s, namesDict) {
             break;
         }
     }
-
     return root;
 }
 
@@ -82,18 +72,21 @@ function getLevels(s, id, lev, level, root)
     }
 }
 
-
+let plec = {};
 let slow = {};
+let allDataXML = {};
 parsedData.forEach(item => {
     slow[item.id_osoby] = [item.id_ojca, item.id_matki, item.id_partnera];
+    plec[item.id_osoby] = item.plec;
+    allDataXML[item.id_osoby] = [item.imie, item.nazwisko, item.data_urodzenia, item.data_smierci];
 });
+
 let familyTreeRoot = buildFamilyTree(slow);
-indexes = {}
+let indexes = {};
+let already_visited = [];
 getLevels(slow, familyTreeRoot.id, indexes, 0, familyTreeRoot);
-
-let dpth = maxDepth(familyTreeRoot);
-
-numbers_of_people_on_lvl = {}
+dpth = maxDepth(familyTreeRoot);
+let numbers_of_people_on_lvl = {};
 
 for(let i = 0; i < dpth; i++)
 {
@@ -105,17 +98,8 @@ for(let i in indexes)
     numbers_of_people_on_lvl[indexes[i][1]]++;
 }
 
-const canvas = document.getElementById("canvas");
-const width = canvas.width;
-const height = canvas.height;
-
-
-for(let i in numbers_of_people_on_lvl)
+function hasPartner(id)
 {
-    let num = numbers_of_people_on_lvl[i];
-
-
+    return slow[id][2] != null;
 }
-
-
 

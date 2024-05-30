@@ -32,6 +32,14 @@ public class GenealogyTreeService {
         return jdbcTemplate.query(sql, new XmlToTableRowMapper(), id);
     }
 
+    public List<GenealogyTree> createNewTree()
+    {
+        jdbcTemplate.update("INSERT INTO drzewo_genealogiczne (xmlData) values ('<drzewo_genealogiczne></drzewo_genealogiczne>')");
+        String sql = "SELECT TOP 1 * FROM drzewo_genealogiczne ORDER BY drzewo_id DESC";
+        return jdbcTemplate.query(sql, new GenealogyTreeRowMapper());
+    }
+
+
     public List<XmlToTableResults> getXmlToTableResultsFatherIndexes(Long id)
     {
         String sql = "SELECT * FROM dbo.xmlToTable(?) where plec='mezczyzna'";

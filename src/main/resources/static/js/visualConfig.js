@@ -18,5 +18,5 @@ function resizeCanvas()
 
 window.addEventListener('load', resizeCanvas);
 window.addEventListener('resize', resizeCanvas);
-
+// resizeCanvas();
 // Przykładowe użycie danych na stronie

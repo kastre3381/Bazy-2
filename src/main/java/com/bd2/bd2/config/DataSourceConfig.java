@@ -14,7 +14,7 @@ public class DataSourceConfig {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        dataSource.setUrl("jdbc:sqlserver://DESKTOP-E10C05E;databaseName=projekt;trustServerCertificate=true;encrypt=false;integratedSecurity=true;");
+        dataSource.setUrl("jdbc:sqlserver://localhost:1433;databaseName=projekt;trustServerCertificate=true;encrypt=false;integratedSecurity=true;");
 
         return dataSource;
     }

@@ -10,10 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
-
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.List;
 
 @Controller
 public class GenealogyTreeController {
@@ -24,12 +25,26 @@ public class GenealogyTreeController {
     @GetMapping("/")
     public String index(Model model) {
         List<GenealogyTree> trees = service.findAll();
+        trees.sort(Comparator.comparing(GenealogyTree::getId));
         model.addAttribute("trees", trees);
         model.addAttribute("newTree", new GenealogyTree());
         model.addAttribute("personId", Long.valueOf(0));
         model.addAttribute("treeId", Long.valueOf(0));
         return "index";
     }
+
+    @PostMapping("/createTree")
+    public String createNewTree(Model model) {
+        List<GenealogyTree> newTree = service.createNewTree();
+        List<GenealogyTree> trees = service.findAll();
+        trees.sort(Comparator.comparing(GenealogyTree::getId));
+        model.addAttribute("trees", trees);
+        model.addAttribute("personId", Long.valueOf(0));
+        model.addAttribute("treeId", Long.valueOf(0));
+        model.addAttribute("newTreeMessage", "Dodano drzewo o ID: " + newTree.get(0).getId());
+        return "index";
+    }
+
 
     @PostMapping("/addPerson")
     public String addPerson(Model model,
@@ -43,6 +58,7 @@ public class GenealogyTreeController {
                             @RequestParam(value = "partnerIdAdd", required = false) Long pid,
                             @RequestParam("plecAdd") String plec) {
         List<GenealogyTree> trees = service.findAll();
+        trees.sort(Comparator.comparing(GenealogyTree::getId));
         model.addAttribute("trees", trees);
         model.addAttribute("newTree", new GenealogyTree());
         model.addAttribute("personId", Long.valueOf(0));
@@ -61,6 +77,7 @@ public class GenealogyTreeController {
     @PostMapping("/deletePerson")
     public String deletePerson(Model model, @RequestParam("personId") Long personId, @RequestParam("treeId") Long treeId) {
         List<GenealogyTree> trees = service.findAll();
+        trees.sort(Comparator.comparing(GenealogyTree::getId));
         model.addAttribute("trees", trees);
         model.addAttribute("newTree", new GenealogyTree());
         model.addAttribute("personId", Long.valueOf(0));
@@ -82,6 +99,7 @@ public class GenealogyTreeController {
     public String selectTree(Model model, @RequestParam("treeIdSelect") Long treeId) {
         List<XmlToTableResults> selectedTree = service.getXmlToTableResults(treeId);
         List<GenealogyTree> trees = service.findAll();
+        trees.sort(Comparator.comparing(GenealogyTree::getId));
         model.addAttribute("trees", trees);
         model.addAttribute("newTree", new GenealogyTree());
         model.addAttribute("personId", Long.valueOf(0));

@@ -9,10 +9,13 @@
 <body class="bg-success" id="body" >
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="mx-auto">
-        <span class="navbar-brand mb-0 h1 mr-3" style="margin-left: 20px">BD2 projekt</span>
-        <button class="btn btn-outline-success my-2 my-sm-0 mr-3" onclick="buttons('addPersonForm')">Formularz dodania osoby</button>
-        <button class="btn btn-outline-success my-2 my-sm-0 mr-3" onclick="buttons('deletePersonForm')">Formularz usunięcia osoby</button>
-        <button class="btn btn-outline-success my-2 my-sm-0 mr-3" onclick="buttons('chooseTreeForm')">Formularz wyboru drzewa</button>
+        <a href="/" class="navbar-brand mb-0 h1 mr-3 ml-3" style="margin-left: 20px">BD2 projekt</a>
+        <button class="btn btn-outline-success my-2 my-sm-0 mr-3 ml-3" onclick="buttons('addPersonForm')">Formularz dodania osoby</button>
+        <button class="btn btn-outline-success my-2 my-sm-0 mr-3 ml-3" onclick="buttons('deletePersonForm')">Formularz usunięcia osoby</button>
+        <button class="btn btn-outline-success my-2 my-sm-0 mr-3 ml-3" onclick="buttons('chooseTreeForm')">Formularz wyboru drzewa</button>
+        <form th:action="@{/createTree}" method="post" class="d-inline">
+            <button type="submit" class="btn btn-outline-success my-2 my-sm-0 mr-3 ml-3">Stwórz puste drzewo</button>
+        </form>
     </div>
 </nav>
     <br><br><br>
@@ -26,11 +29,10 @@
                     <!-- Formularz dodawania nowego drzewa -->
                     <div class="mt-4" id="addPersonForm" style="display: none">
                         <form th:action="@{/addPerson}" method="post">
-                            <div class="form-group">
+                            <div class="form-group mb-3">
                                 <label for="treeIdAdd">Tree ID</label>
                                 <select class="form-control" id="treeIdAdd" name="treeIdAdd" required>
                                     <option th:each="tree : ${trees}" th:value="${tree.id}" th:text="${tree.id}"></option>
-                                    <option value="nowe">Utwórz nowe drzewo</option>
                                 </select>
                                 <label for="nameAdd">Imie</label>
                                 <input type="text" class="form-control" id="nameAdd" name="nameAdd" required></input>
@@ -60,7 +62,7 @@
                     <div class="mt-4"  id="deletePersonForm" style="display: none">
                         <h3>Delete Person</h3>
                         <form th:action="@{/deletePerson}" method="post">
-                            <div class="form-group">
+                            <div class="form-group mb-3">
                                 <label for="personId">Person ID</label>
                                 <input type="number" class="form-control" id="personId" name="personId" required>
                                 <label for="treeId">Tree ID</label>
@@ -122,10 +124,17 @@
             </div>
         </div>
 
-
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script th:if="${error != null}" th:inline="javascript">
         /*<![CDATA[*/
         alert(/*[[${error}]]*/);
+        /*]]>*/
+    </script>
+    <script th:if="${newTreeMessage != null}" th:inline="javascript">
+        /*<![CDATA[*/
+        alert(/*[[${newTreeMessage}]]*/);
         /*]]>*/
     </script>
     <script  th:inline="javascript">
@@ -133,10 +142,8 @@
         const data = /*[[${jsonData}]]*/ '[]';
         /*]]>*/
     </script>
-    <script src="/js/visualConfig.js"></script>
-    <script src="/js/treeDrawer.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/js/visualConfig.js?v=1.0"></script>
+    <script src="/js/treeDrawer.js?v=1.0"></script>
+    <script src="/js/draw.js?v=1.0"></script>
 </body>
 </html>
