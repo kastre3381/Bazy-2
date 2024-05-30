@@ -3,59 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <title>Genealogy Tree</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/styles.css" type="text/css"/>
 </head>
-<body>
-<div class="container">
-    <h1 class="mt-5">Genealogy Tree</h1>
-
-    <!-- Formularz dodawania nowego drzewa -->
-    <div class="mt-4">
-        <h3>Add New Tree</h3>
-        <form th:action="@{/addTree}" th:object="${newTree}" method="post">
-            <div class="form-group">
-                <label for="xmlData">XML Data</label>
-                <textarea class="form-control" id="xmlData" th:field="*{xmlData}" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Add Tree</button>
-        </form>
+<body class="bg-success" id="body" >
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="mx-auto">
+        <span class="navbar-brand mb-0 h1 mr-3" style="margin-left: 20px">BD2 projekt</span>
+        <button class="btn btn-outline-success my-2 my-sm-0 mr-3" onclick="buttons('addPersonForm')">Formularz dodania osoby</button>
+        <button class="btn btn-outline-success my-2 my-sm-0 mr-3" onclick="buttons('deletePersonForm')">Formularz usunięcia osoby</button>
+        <button class="btn btn-outline-success my-2 my-sm-0 mr-3" onclick="buttons('chooseTreeForm')">Formularz wyboru drzewa</button>
     </div>
+</nav>
+    <br><br><br>
+        <div class="container mb-5 justify-content-center" >
+            <div class="row">
+                <div class="col">
+                    <canvas id="canvas" width="50vw" height="80vh" style="border:1px solid #000000;" class="bg-light"></canvas>
+                </div>
 
-    <!-- Formularz usuwania osoby -->
-    <div class="mt-4">
-        <h3>Delete Person</h3>
-        <form th:action="@{/deletePerson}" method="post">
-            <div class="form-group">
-                <label for="personId">Person ID</label>
-                <input type="number" class="form-control" id="personId" name="personId" required>
-            </div>
-            <div class="form-group">
-                <label for="treeId">Tree ID</label>
-                <input type="number" class="form-control" id="treeId" name="treeId" required>
-            </div>
-            <button type="submit" class="btn btn-danger">Delete Person</button>
-        </form>
-    </div>
+                <div class="col col-lg-3">
+                    <!-- Formularz dodawania nowego drzewa -->
+                    <div class="mt-4" id="addPersonForm" style="display: none">
+                        <form th:action="@{/addPerson}" method="post">
+                            <div class="form-group">
+                                <label for="treeIdAdd">Tree ID</label>
+                                <select class="form-control" id="treeIdAdd" name="treeIdAdd" required>
+                                    <option th:each="tree : ${trees}" th:value="${tree.id}" th:text="${tree.id}"></option>
+                                    <option value="nowe">Utwórz nowe drzewo</option>
+                                </select>
+                                <label for="nameAdd">Imie</label>
+                                <input type="text" class="form-control" id="nameAdd" name="nameAdd" required></input>
+                                <label for="surnameAdd">Nazwisko</label>
+                                <input type="text" class="form-control" id="surnameAdd" name="surnameAdd" required></input>
+                                <label for="birthDateAdd">Data urodzenia</label>
+                                <input type="date" class="form-control" id="birthDateAdd" name="birthDateAdd" required></input>
+                                <label for="deathDateAdd">Data śmierci</label>
+                                <input type="date" class="form-control" id="deathDateAdd" name="deathDateAdd"></input>
+                                <label for="fatherIdAdd">ID ojca</label>
+                                <input type="number" class="form-control" id="fatherIdAdd" name="fatherIdAdd"></input>
+                                <label for="motherIdAdd">ID matki</label>
+                                <input type="number" class="form-control" id="motherIdAdd" name="motherIdAdd"></input>
+                                <label for="partnerIdAdd">ID partnera</label>
+                                <input type="number" class="form-control" id="partnerIdAdd" name="partnerIdAdd"></input>
+                                <label for="plecAdd">Płeć</label>
+                                <select class="form-control" id="plecAdd" name="plecAdd" required>
+                                    <option value="mezczyzna">Mężczyzna</option>
+                                    <option value="kobieta">Kobieta</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Tree</button>
+                        </form>
+                    </div>
 
-    <!-- Formularz wyboru drzewa -->
-    <div class="mt-4">
-        <h3>Select Tree</h3>
-        <form th:action="@{/selectTree}" method="post">
-            <div class="form-group">
-                <label for="treeIdSelect">Tree ID</label>
-                <select class="form-control" id="treeIdSelect" name="treeIdSelect" required>
-                    <option th:each="tree : ${trees}" th:value="${tree.id}" th:text="${tree.id}"></option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Select Tree</button>
-        </form>
-    </div>
+                    <!-- Formularz usuwania osoby -->
+                    <div class="mt-4"  id="deletePersonForm" style="display: none">
+                        <h3>Delete Person</h3>
+                        <form th:action="@{/deletePerson}" method="post">
+                            <div class="form-group">
+                                <label for="personId">Person ID</label>
+                                <input type="number" class="form-control" id="personId" name="personId" required>
+                                <label for="treeId">Tree ID</label>
+                                <select class="form-control" id="treeId" name="treeId" required>
+                                    <option th:each="tree : ${trees}" th:value="${tree.id}" th:text="${tree.id}"></option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-danger">Delete Person</button>
+                        </form>
+                    </div>
 
-    <!-- Wyświetlanie wybranego drzewa -->
-    <div class="mt-4" th:if="${selectedTree != null}">
-        <h3>Selected Tree</h3>
-        <pre th:text="${selectedTree.xmlData}"></pre>
-    </div>
-</div>
+                    <!-- Formularz wyboru drzewa -->
+                    <div class="mt-4" id="chooseTreeForm" style="display: none">
+                        <form th:action="@{/selectTree}" method="post">
+                            <div class="form-group mb-3">
+                                <label for="treeIdSelect">Tree ID</label>
+                                <select class="form-control" id="treeIdSelect" name="treeIdSelect" required>
+                                    <option th:each="tree : ${trees}" th:value="${tree.id}" th:text="${tree.id}"></option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Wybierz Drzewo</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Wyświetlanie wybranego drzewa -->
+            <div class="mt-4" th:if="${xmlToTable != null}" id="table">
+                <table class="table table-hover table-dark">
+                    <thead>
+                    <tr>
+                        <th>id_osoby</th>
+                        <th>imie</th>
+                        <th>nazwisko</th>
+                        <th>data_urodzenia</th>
+                        <th>data_smierci</th>
+                        <th>plec</th>
+                        <th>id_ojca</th>
+                        <th>id_matki</th>
+                        <th>id_partnera</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="data : ${xmlToTable}">
+                        <td th:text="${data.id_osoby}">id_osoby</td>
+                        <td th:text="${data.imie}">imie</td>
+                        <td th:text="${data.nazwisko}">nazwisko</td>
+                        <td th:text="${data.data_urodzenia}">data_urodzenia</td>
+                        <td th:text="${data.data_smierci}">data_smierci</td>
+                        <td th:text="${data.plec}">plec</td>
+                        <td th:if="${data.id_ojca != -1 && data.id_ojca != 0}" th:text="${data.id_ojca}">id_ojca</td>
+                        <td th:unless="${data.id_ojca != -1 && data.id_ojca != 0}"></td>
+                        <td th:if="${data.id_matki != -1 && data.id_matki != 0}" th:text="${data.id_matki}">id_matki</td>
+                        <td th:unless="${data.id_matki != -1 && data.id_matki != 0}"></td>
+                        <td th:if="${data.id_partnera != -1 && data.id_partnera != 0}" th:text="${data.id_partnera}">id_partnera</td>
+                        <td th:unless="${data.id_partnera != -1 && data.id_partnera != 0}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    <script src="/js/visualConfig.js"></script>
+    <script th:if="${error != null}" th:inline="javascript">
+        /*<![CDATA[*/
+        alert(/*[[${error}]]*/);
+        /*]]>*/
+    </script>
+    <script  th:inline="javascript">
+        /*<![CDATA[*/
+        const data = /*[[${jsonData}]]*/ '[]';
+        /*]]>*/
+    </script>
+    <script src="/js/treeDrawer.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

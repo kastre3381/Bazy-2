@@ -7,9 +7,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
-import java.io.Console;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.sql.Types;
+import java.text.ParseException;
 import java.util.List;
 
 @Service
@@ -25,16 +28,86 @@ public class GenealogyTreeService {
 
     public List<XmlToTableResults> getXmlToTableResults(Long id)
     {
-        String sql = "SELECT * FROM dbo.xmlToTable(34)";
-        return jdbcTemplate.query(sql, new XmlToTableRowMapper());
+        String sql = "SELECT * FROM dbo.xmlToTable(?)";
+        return jdbcTemplate.query(sql, new XmlToTableRowMapper(), id);
+    }
+
+    public List<XmlToTableResults> getXmlToTableResultsFatherIndexes(Long id)
+    {
+        String sql = "SELECT * FROM dbo.xmlToTable(?) where plec='mezczyzna'";
+        return jdbcTemplate.query(sql, new XmlToTableRowMapper(), id);
+    }
+
+    public List<XmlToTableResults> getXmlToTableResultsMotherIndexes(Long id)
+    {
+        String sql = "SELECT * FROM dbo.xmlToTable(?) where plec='kobieta'";
+        return jdbcTemplate.query(sql, new XmlToTableRowMapper(), id);
+    }
+
+    public List<XmlToTableResults> getXmlToTableResultsFreePartnersIndexes(Long id)
+    {
+        String sql = "SELECT * FROM dbo.xmlToTable(?) where id_partnera is NULL";
+        return jdbcTemplate.query(sql, new XmlToTableRowMapper(), id);
     }
 
 
-    public void save(GenealogyTree genealogyTree) {
-        String sql = "INSERT INTO drzewo_genealogiczne (xmlData) VALUES (?)";
-        jdbcTemplate.update(sql, genealogyTree.getXmlData());
-        System.out.println("Saved genealogy tree with XML Data: " + genealogyTree.getXmlData());
+    public void save(Long drzewoid,
+                     String name,
+                     String surname,
+                     String bdate,
+                     String ddate,
+                     Long fid,
+                     Long mid,
+                     Long pid,
+                     String plec) {
+        if (fid == null || fid == 0) {
+            fid = -1L;
+        }
+
+        if (mid == null || mid == 0) {
+            mid = -1L;
+        }
+
+        if (pid == null || pid == 0) {
+            pid = -1L;
+        }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date birthDate = null, deathDate = null;
+        try
+        {
+            birthDate = dateFormat.parse(bdate);
+            deathDate = ddate == null ? null : dateFormat.parse(ddate);
+        } catch (Exception e)
+        {
+            e.getStackTrace();
+        }
+
+        System.out.println(
+                drzewoid + ", " +
+                        name + ", " +
+                        surname + ", " +
+                        bdate + ", " +
+                        ddate + ", " +
+                        fid + ", " +
+                        mid + ", " +
+                        pid + ", " +
+                        plec + ", " +
+                        birthDate + ", " +
+                        deathDate
+                );
+
+        String sql;
+        if (deathDate == null) {
+            sql = "EXEC dbo.dodaj_osobe_do_drzewa_c_bez_daty @DrzewoID=?, @imie=?, @nazwisko=?, @data_urodzenia=?, @id_ojca=?, @id_matki=?, @plec=?, @id_partner=?";
+            jdbcTemplate.update(sql, drzewoid, name, surname, birthDate, fid, mid, plec, pid);
+        } else {
+            sql = "EXEC dbo.dodaj_osobe_do_drzewa_c @DrzewoID=?, @imie=?, @nazwisko=?, @data_urodzenia=?, @data_smierci=?, @id_ojca=?, @id_matki=?, @plec=?, @id_partner=?";
+            jdbcTemplate.update(sql, drzewoid, name, surname, birthDate, deathDate, fid, mid, plec, pid);
+        }
+        System.out.println("Saved person");
     }
+
 
     public void deleteById(Long id) {
         String sql = "DELETE FROM drzewo_genealogiczne WHERE id = ?";
@@ -54,6 +127,8 @@ public class GenealogyTreeService {
         System.out.println(genealogyTrees);
         return genealogyTrees;
     }
+
+
 
     private static class GenealogyTreeRowMapper implements RowMapper<GenealogyTree> {
         @Override
