@@ -9,9 +9,9 @@ function buttons(id)
 
 function resizeCanvas()
 {
-    var canvas = document.getElementById("canvas");
-    var vw = window.innerWidth;
-    var vh = window.innerHeight;
+    const canvas = document.getElementById("canvas");
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
     canvas.width = 0.5 * vw;
     canvas.height = 0.8 * vh;
 }

@@ -105,9 +105,16 @@ for(let i in indexes)
     numbers_of_people_on_lvl[indexes[i][1]]++;
 }
 
+const canvas = document.getElementById("canvas");
+const width = canvas.width;
+const height = canvas.height;
+
+
 for(let i in numbers_of_people_on_lvl)
 {
-    alert(i + ".    " + numbers_of_people_on_lvl[i]);
+    let num = numbers_of_people_on_lvl[i];
+
+
 }
 
 
