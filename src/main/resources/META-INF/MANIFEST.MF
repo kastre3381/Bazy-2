@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Main-Class: com.bd2.bd2.Bd2Application
+Class-Path: spring-beans-6.1.8.jar jackson-datatype-jsr310-2.17.1.jar sp
+ ring-boot-starter-web-3.3.0.jar attoparser-2.0.7.RELEASE.jar jackson-mo
+ dule-parameter-names-2.17.1.jar spring-aop-6.1.8.jar spring-jdbc-6.1.8.
+ jar spring-context-6.1.8.jar thymeleaf-3.1.2.RELEASE.jar spring-web-6.1
+ .8.jar spring-boot-starter-thymeleaf-3.3.0.jar spring-boot-starter-json
+ -3.3.0.jar spring-webmvc-6.1.8.jar jul-to-slf4j-2.0.13.jar snakeyaml-2.
+ 2.jar spring-boot-starter-tomcat-3.3.0.jar tomcat-embed-el-10.1.24.jar 
+ slf4j-api-2.0.13.jar jackson-core-2.17.1.jar spring-boot-3.3.0.jar spri
+ ng-boot-autoconfigure-3.3.0.jar logback-core-1.5.6.jar logback-classic-
+ 1.5.6.jar micrometer-commons-1.13.0.jar HikariCP-5.1.0.jar unbescape-1.
+ 1.6.RELEASE.jar jackson-datatype-jdk8-2.17.1.jar jakarta.annotation-api
+ -2.1.1.jar spring-boot-starter-3.3.0.jar spring-boot-starter-logging-3.
+ 3.0.jar tomcat-embed-websocket-10.1.24.jar jackson-annotations-2.17.1.j
+ ar spring-jcl-6.1.8.jar spring-expression-6.1.8.jar spring-boot-starter
+ -jdbc-3.3.0.jar thymeleaf-spring6-3.1.2.RELEASE.jar spring-tx-6.1.8.jar
+  log4j-api-2.23.1.jar tomcat-embed-core-10.1.24.jar micrometer-observat
+ ion-1.13.0.jar jackson-databind-2.17.1.jar spring-core-6.1.8.jar mssql-
+ jdbc-12.6.1.jre11.jar log4j-to-slf4j-2.23.1.jar
+
